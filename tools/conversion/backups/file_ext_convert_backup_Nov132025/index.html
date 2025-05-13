@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>File Extension Converter – Pure Front-End</title>
+  <!-- Tailwind & Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+  <!-- HEIC conversion library -->
+  <script src="https://cdn.jsdelivr.net/npm/heic2any/dist/heic2any.min.js"></script>
+  <!-- PDF.js Library for PDF handling -->
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+  <!-- JSZip for zip handling -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <!-- Docx handling -->
+  <script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
+  <!-- jsPDF library for PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- html2pdf.js library for better PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.3/html2pdf.bundle.min.js" integrity="sha512-yu5WG6ewBNKx8svICzUA01vozhmiQCVfzjzW40eCHJdsDRaOifh9hPlWBDex5b32gWCzawTp1F3FJz60ps6TnQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <!-- Turndown library used for HTML to Markdown conversion -->
+  <script src="https://cdn.jsdelivr.net/npm/turndown/dist/turndown.min.js"></script>
+  <!-- JS Modules -->
+  <script src="js/constants.js"></script>
+  <script src="js/utilities.js"></script>
+  <script src="js/conversion-helpers.js"></script>
+  <script src="js/ui-handlers.js"></script>
+  <script src="js/main.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col items-center justify-center p-4">
+  <main id="panel" class="bg-white shadow-xl rounded-lg max-w-3xl w-full p-6 space-y-8 transition-all">
+    <!-- Header -->
+    <header class="text-center space-y-1">
+      <h1 class="text-3xl font-semibold text-gray-800 tracking-tight">File Extension Converter</h1>
+      <p class="text-gray-500">Fast and Minimal</p>
+    </header>
+    
+    <!-- Import Section -->
+    <section>
+      <h2 class="text-xl font-semibold flex items-center gap-2 mb-3">
+        <i class="fas fa-file-upload text-indigo-600"></i> Upload or Drop File
+      </h2>
+      <div id="dropZone" class="relative flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-md h-40 cursor-pointer transition-colors">
+        <i class="fas fa-cloud-upload-alt text-3xl text-gray-400"></i>
+        <p class="mt-2 text-gray-500">Drag &amp; drop file here<br><span class="text-sm">or click to choose</span></p>
+        <input type="file" id="fileInput" class="absolute inset-0 opacity-0 cursor-pointer">
+      </div>
+      <input type="text" id="importedFilename" readonly class="mt-4 w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-600 cursor-not-allowed" placeholder="No file selected">
+    </section>
+    
+    <!-- Conversion Option Categories (Always Visible) -->
+    <section>
+      <h2 class="text-xl font-semibold flex items-center gap-2 mb-3">
+        <i class="fas fa-images text-indigo-600"></i> Image Conversions
+      </h2>
+      <div id="imageGrid" class="grid grid-cols-3 sm:grid-cols-6 gap-3"></div>
+    </section>
+    
+    <section>
+      <h2 class="text-xl font-semibold flex items-center gap-2 mb-3">
+        <i class="fas fa-file-alt text-indigo-600"></i> Document Conversions
+      </h2>
+      <div id="docGrid" class="grid grid-cols-3 sm:grid-cols-6 gap-3"></div>
+    </section>
+    
+    <section>
+      <h2 class="text-xl font-semibold flex items-center gap-2 mb-3">
+        <i class="fas fa-file-archive text-indigo-600"></i> Archive Conversions
+      </h2>
+      <div id="archiveGrid" class="grid grid-cols-3 sm:grid-cols-6 gap-3"></div>
+    </section>
+    
+    <!-- Supported File Extensions Section -->
+    <section id="supportedExtSection" class="mt-8 p-4 bg-indigo-50 border border-indigo-200 rounded-md">
+      <h2 class="text-xl font-semibold mb-3 text-indigo-700 flex items-center gap-2">
+        <i class="fas fa-info-circle"></i> Supported File Extensions
+      </h2>
+      <div class="space-y-2 text-indigo-900">
+        <div><strong>Image Types:</strong> jpg, jpeg, png, webp, gif, heic, heif</div>
+        <div><strong>Document Types:</strong> html, md, txt, csv, json, xml, pdf, docx</div>
+        <div><strong>Archive Types:</strong> zip, tar</div>
+      </div>
+    </section>
+
+    <!-- Warning Section for Unstable Conversion Methods -->
+    <section class="mt-4 p-4 bg-yellow-50 border border-yellow-300 rounded-md">
+      <h2 class="text-lg font-semibold mb-2 text-yellow-800 flex items-center gap-2">
+        <i class="fas fa-exclamation-triangle"></i> Important Conversion Warnings
+      </h2>
+      <ul class="list-disc pl-6 text-yellow-900 text-sm space-y-1">
+        <li><strong>PDF to Text/HTML:</strong> Extraction may be incomplete or inaccurate for scanned/image-based PDFs or complex layouts.</li>
+        <li><strong>DOCX to PDF:</strong> Formatting may not be preserved exactly, especially for complex documents with images, tables, or advanced styles.</li>
+        <li><strong>CSV/JSON/XML:</strong> Data structure mismatches or special characters may cause conversion errors or data loss. Always check your output.</li>
+        <li><strong>Image Conversions:</strong> Animated GIFs and some HEIC/HEIF files may not convert perfectly. Transparency and color profiles may be lost.</li>
+        <li><strong>Archive (TAR/ZIP):</strong> Only single-file archiving is supported. Multi-file or folder archiving is not available.</li>
+      </ul>
+      <div class="mt-2 text-xs text-yellow-700">
+        <strong>Tip:</strong> Always review your converted files before using them for important work. If you encounter issues, try a different conversion or use a dedicated tool for critical documents.
+      </div>
+    </section>
+    
+    <!-- Convert Button -->
+    <button id="convertBtn" disabled class="btn-click w-full py-3 rounded-md bg-indigo-600 text-white font-semibold tracking-wide hover:bg-indigo-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+      Convert
+    </button>
+    
+    <!-- Result & Preview -->
+    <div id="resultContainer" class="hidden p-4 rounded-md border text-center font-medium break-words transition-all"></div>
+    <div id="previewContainer" class="hidden mt-4 space-y-4"></div>
+    
+    <!-- Conversion status -->
+    <div id="statusContainer" class="hidden">
+      <div class="w-full bg-gray-200 rounded-full h-2.5">
+        <div id="progressBar" class="bg-indigo-600 h-2.5 rounded-full" style="width: 0%"></div>
+      </div>
+      <p id="statusText" class="text-sm text-gray-600 mt-1 text-center"></p>
+    </div>
+  </main>
+</body>
+</html>

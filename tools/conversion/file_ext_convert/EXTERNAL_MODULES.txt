@@ -1,0 +1,136 @@
+# External JS Modules in Conversion App
+
+This project is modularized for maintainability and easy extension. Below are the main JavaScript modules, their responsibilities, and detailed instructions and use cases for each.
+
+---
+
+## 1. js/constants.js
+**Purpose:**
+- Defines all supported file type arrays (images, documents, archives, etc.).
+- Contains the `conversionMap` object, which determines allowed conversions for each file type.
+
+**How to use/modify:**
+- **Add a new file type:**
+  - Add the extension to the appropriate array (e.g., `imageTypes`, `docTypes`).
+  - Update `conversionMap` to specify what conversions are allowed from/to this type.
+- **Change conversion rules:**
+  - Edit the `conversionMap` object. The key is the source extension, and the value is an array of allowed target extensions.
+- **Remove a file type:**
+  - Remove it from the relevant array and from any `conversionMap` entries.
+
+**Use Cases:**
+- Add support for a new image format (e.g., `bmp`): Add to `imageTypes` and update `conversionMap`.
+- Restrict or expand what file types can be converted to/from each other.
+
+---
+
+## 2. js/utilities.js
+**Purpose:**
+- Contains utility functions for data format conversion (CSV, JSON, XML, etc.).
+- Functions: `csvToJson`, `jsonToCsv`, `xmlToJson`, `jsonToXml`.
+
+**How to use/modify:**
+- **Add a new data conversion:**
+  - Write a new function (e.g., `yamlToJson`) and use it in the main conversion logic.
+- **Improve parsing/formatting:**
+  - Edit the relevant function for better accuracy or edge case handling.
+- **Use in other modules:**
+  - All functions are globally available if loaded via `<script>`. Otherwise, use ES module syntax if you refactor to modules.
+
+**Use Cases:**
+- Add support for YAML: add `yamlToJson` and `jsonToYaml` functions.
+- Fix a bug in CSV parsing: update `csvToJson`.
+
+---
+
+## 3. js/conversion-helpers.js
+**Purpose:**
+- Provides helper functions for file conversions (images, documents, PDF, DOCX, TAR, etc.).
+- Functions: `convertImage`, `convertPdfToTextOrHtml`, `convertDocxToTextOrHtml`, `createTarFromFile`, and text/markdown/html conversion helpers.
+
+**How to use/modify:**
+- **Add a new conversion logic:**
+  - Write a new function (e.g., `convertSvgToPng`).
+  - Integrate it in `main.js` where conversions are handled.
+- **Improve conversion quality:**
+  - Tweak canvas/image logic, PDF rendering, or text extraction as needed.
+- **Handle new libraries:**
+  - Add `<script src="..."></script>` in `index.html` for new libraries, then use them in your helpers.
+
+**Use Cases:**
+- Add support for converting SVG to PNG: add a `convertSvgToPng` function and update `main.js` to use it.
+- Improve PDF text extraction: update `convertPdfToTextOrHtml`.
+
+---
+
+## 4. js/ui-handlers.js
+**Purpose:**
+- Handles UI logic, button creation, and state updates.
+- Functions: `buildButtons`, `showMsg`, `clearMsg`, `clearPreview`, `showProgress`, `updateProgress`, `handleFileSelection`, `updateConversionOptions`.
+
+**How to use/modify:**
+- **Change UI behavior:**
+  - Edit `buildButtons` to change how conversion options are displayed.
+  - Update `showMsg`/`clearMsg` for custom notifications.
+- **Add new UI features:**
+  - Add new functions for tooltips, modals, or advanced previews.
+- **Accessibility:**
+  - Ensure ARIA attributes and keyboard navigation are handled here if needed.
+
+**Use Cases:**
+- Change the look of conversion option buttons: update `buildButtons`.
+- Add a tooltip or help message: add a new function and call it from the UI.
+
+---
+
+## 5. js/main.js
+**Purpose:**
+- Main entry point. Initializes the app, sets up event listeners, and coordinates the conversion process.
+- Handles drag-and-drop, file input, and conversion button logic.
+
+**How to use/modify:**
+- **Change app workflow:**
+  - Edit event listeners or the main conversion handler (`handleConvertClick`).
+- **Add new event handlers:**
+  - For new UI elements, add listeners here.
+- **Integrate new conversions:**
+  - Add new conversion logic in the main handler, using helpers/utilities as needed.
+- **Startup logic:**
+  - Modify the initial state setup if you want to pre-select options or auto-run conversions.
+
+**Use Cases:**
+- Add a new button for batch conversion: add the button in HTML, then add an event listener here.
+- Change the drag-and-drop behavior: update the relevant event handlers.
+
+---
+
+# General Instructions & Use Cases
+
+## Add a New File Type or Conversion
+1. Update `constants.js` to add the new extension and update `conversionMap`.
+2. Add conversion logic in `conversion-helpers.js` or `utilities.js`.
+3. If UI changes are needed, update `ui-handlers.js`.
+4. Integrate the new logic in `main.js`.
+
+## Change UI/UX
+- Edit `ui-handlers.js` for option grids, messages, and state changes.
+- Edit `styles.css` for custom styles.
+
+## Add a New Library
+- Add a `<script src="..."></script>` tag in `index.html` before your own JS files.
+- Use the library in your helpers or main logic.
+
+## Debugging
+- All modules are loaded globally via `<script>` tags. If you see `undefined` errors, check the order of your `<script>` tags in `index.html`.
+- Use browser dev tools to inspect DOM and JS errors.
+
+## Refactoring to ES Modules (Optional)
+- Change `<script src="...">` to `<script type="module" src="...">` in `index.html`.
+- Use `export`/`import` syntax in your JS files.
+- Update all references accordingly.
+
+---
+
+**All modules are loaded via `<script src="js/filename.js"></script>` in `index.html` and are globally available unless you refactor to ES modules.**
+
+For further customization, see comments in each JS file for more details.

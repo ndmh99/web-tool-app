@@ -1,0 +1,869 @@
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Management Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f9fafb;
+    }
+    /* Smooth fade and slide animation for modals and alerts */
+    .fade-slide-enter {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    .fade-slide-enter-active {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .fade-slide-leave {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .fade-slide-leave-active {
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    /* Scrollbar styling for tool list */
+    .scrollbar-thin::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .scrollbar-thin::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+      background-color: #93c5fd;
+      border-radius: 3px;
+    }
+    /* Focus ring for accessibility */
+    button:focus,
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: 2px solid #2563eb;
+      outline-offset: 2px;
+    }
+
+    /* Mobile-specific styles */
+    @media (max-width: 720px) {
+      .mobile-stack {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .mobile-stack > * {
+        width: 100%;
+      }
+      .mobile-scroll {
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      .mobile-scroll::-webkit-scrollbar {
+        display: none;
+      }
+      .mobile-card {
+        display: flex;
+        flex-direction: column;
+        background: white;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      }
+      .mobile-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+      }
+      .mobile-hidden {
+        display: none;
+      }
+      .mobile-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+      .mobile-full {
+        width: 100% !important;
+      }
+      .mobile-text-sm {
+        font-size: 0.875rem;
+      }
+      .mobile-px-2 {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+  <header class="bg-white shadow sticky top-0 z-40">
+    <nav class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center md:gap-2">
+      <a href="./index.html" class="flex items-center space-x-2 text-blue-700 font-extrabold text-xl hover:text-blue-800 transition">
+        <i class="fas fa-tools"></i>
+        <span>Web Tools</span>
+      </a>
+      <h1 class="text-base font-semibold text-gray-700 order-2 md:order-2 w-full md:w-auto">Management Dashboard</h1>
+      <div class="flex items-center gap-2 ml-auto order-1 md:order-3">
+        <button
+          id="btnResetExampleData"
+          class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-2 py-1.5 rounded-md text-sm font-medium focus:ring-2 focus:ring-blue-300 mobile-text-sm"
+          aria-label="Reset to Example Data"
+        >
+          <i class="fas fa-undo"></i>
+          <span class="hidden md:inline ml-1">Update Changes</span>
+        </button>
+        <button
+          id="btnAddTool"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md flex items-center space-x-1 focus:ring-4 focus:ring-blue-300 mobile-text-sm"
+          aria-label="Add new tool"
+        >
+          <i class="fas fa-plus"></i>
+          <span>Add</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="flex-grow max-w-7xl mx-auto px-4 py-6">
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center space-x-2">
+        <i class="fas fa-list-alt text-blue-600"></i>
+        <span>Tools Management</span>
+      </h2>
+      <div class="overflow-x-auto rounded-lg md:shadow md:bg-white">
+        <table class="min-w-full" aria-label="Tools list">
+          <thead class="bg-blue-50">
+            <tr>
+              <th scope="col" colspan="5" class="px-4 text-left text-xs font-medium text-blue-700 uppercase tracking-wider"></th>
+            </tr>
+            <tr>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">Image</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">Tool Name</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">Category</th>
+              <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-blue-700 uppercase tracking-wider">Link</th>
+              <th scope="col" class="px-4 py-3 text-center text-xs font-medium text-blue-700 uppercase tracking-wider">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="toolsTableBody" class="divide-y divide-gray-100 max-h-[480px] overflow-y-auto scrollbar-thin">
+            <!-- Tools rows inserted here dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center space-x-2">
+        <i class="fas fa-tags text-blue-600"></i>
+        <span>Categories Management</span>
+      </h2>
+      <div class="flex flex-col space-y-3">
+        <div class="flex flex-col sm:flex-row gap-3">
+          <input
+            type="text"
+            id="newCategoryInput"
+            placeholder="Add new category"
+            class="flex-grow border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+            aria-label="New category name"
+          />
+          <button
+            id="btnAddCategory"
+            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center justify-center space-x-2 focus:ring-4 focus:ring-green-300 mobile-full"
+            aria-label="Add category"
+          >
+            <i class="fas fa-plus"></i>
+            <span>Add Category</span>
+          </button>
+        </div>
+        <ul id="categoriesList" class="flex flex-wrap gap-2" aria-label="List of categories">
+          <!-- Categories inserted dynamically -->
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal backdrop -->
+  <div
+    id="modalBackdrop"
+    class="fixed inset-0 bg-black bg-opacity-30 hidden z-50 flex items-center justify-center"
+    aria-hidden="true"
+  ></div>
+
+  <!-- Modal: Add/Edit Tool -->
+  <div
+    id="modalTool"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalToolTitle"
+    class="fixed inset-0 flex items-center justify-center p-4 hidden z-50"
+  >
+    <div
+      class="bg-white rounded-lg shadow-lg w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto relative"
+      tabindex="-1"
+    >
+      <button
+        id="modalCloseBtn"
+        aria-label="Close modal"
+        class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded p-1"
+      >
+        <i class="fas fa-times fa-lg"></i>
+      </button>
+      <div class="p-6">
+        <h3 id="modalToolTitle" class="text-xl font-semibold text-gray-800 mb-6 pr-8">Add New Tool</h3>
+        <form id="toolForm" class="space-y-4" novalidate>
+          <div>
+            <label for="toolName" class="block text-gray-700 font-medium mb-1">Tool Name <span class="text-red-600">*</span></label>
+            <input
+              type="text"
+              id="toolName"
+              name="toolName"
+              required
+              class="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+              placeholder="E.g. JSFiddle"
+              autocomplete="off"
+            />
+            <p class="text-red-600 text-sm mt-1 hidden" id="toolNameError">Please enter a tool name.</p>
+          </div>
+          <div>
+            <label for="toolLink" class="block text-gray-700 font-medium mb-1">Tool Link (URL) <span class="text-red-600">*</span></label>
+            <input
+              type="url"
+              id="toolLink"
+              name="toolLink"
+              required
+              class="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+              placeholder="https://example.com"
+              autocomplete="off"
+            />
+            <p class="text-red-600 text-sm mt-1 hidden" id="toolLinkError">Please enter a valid URL.</p>
+          </div>
+          <div>
+            <label for="toolImage" class="block text-gray-700 font-medium mb-1">Image URL <span class="text-red-600">*</span></label>
+            <input
+              type="url"
+              id="toolImage"
+              name="toolImage"
+              required
+              class="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+              placeholder="https://placehold.co/80x80?text=Tool+Image"
+              autocomplete="off"
+            />
+            <p class="text-red-600 text-sm mt-1 hidden" id="toolImageError">Please enter a valid image URL.</p>
+          </div>
+          <div>
+            <label for="toolAlt" class="block text-gray-700 font-medium mb-1">Image Alt Text <span class="text-red-600">*</span></label>
+            <input
+              type="text"
+              id="toolAlt"
+              name="toolAlt"
+              required
+              class="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+              placeholder="Describe the image for accessibility"
+              autocomplete="off"
+            />
+            <p class="text-red-600 text-sm mt-1 hidden" id="toolAltError">Please enter alt text for the image.</p>
+          </div>
+          <div>
+            <label for="toolCategory" class="block text-gray-700 font-medium mb-1">Category <span class="text-red-600">*</span></label>
+            <select
+              id="toolCategory"
+              name="toolCategory"
+              required
+              class="w-full border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+            >
+              <!-- Categories options inserted dynamically -->
+            </select>
+            <p class="text-red-600 text-sm mt-1 hidden" id="toolCategoryError">Please select a category.</p>
+          </div>
+          <div class="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-gray-200">
+            <button
+              type="button"
+              id="btnCancel"
+              class="px-4 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 focus:ring-2 focus:ring-blue-400 focus:outline-none w-full sm:w-auto"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              id="btnSave"
+              class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md flex items-center justify-center space-x-2 focus:ring-4 focus:ring-blue-300 w-full sm:w-auto"
+            >
+              <i class="fas fa-save"></i>
+              <span>Save</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div
+    id="toast"
+    class="fixed bottom-4 right-4 left-4 md:left-auto md:bottom-6 md:right-6 bg-blue-600 text-white px-4 py-3 rounded-md shadow-lg opacity-0 pointer-events-none select-none z-50 flex items-center space-x-3"
+    role="alert"
+    aria-live="assertive"
+  >
+    <i class="fas fa-check-circle"></i>
+    <span id="toastMessage" class="font-medium text-sm"></span>
+  </div>
+
+  <script src="web-tools-list.js"></script>
+  <script>
+    (() => {
+      // Data keys for localStorage
+      const STORAGE_KEY_TOOLS = 'web_tools_list';
+      const STORAGE_KEY_CATEGORIES = 'web_tools_categories';
+
+      // Elements
+      const toolsTableBody = document.getElementById('toolsTableBody');
+      const categoriesList = document.getElementById('categoriesList');
+      const newCategoryInput = document.getElementById('newCategoryInput');
+      const btnAddCategory = document.getElementById('btnAddCategory');
+      const btnAddTool = document.getElementById('btnAddTool');
+      const btnResetExampleData = document.getElementById('btnResetExampleData');
+      const modalBackdrop = document.getElementById('modalBackdrop');
+      const modalTool = document.getElementById('modalTool');
+      const modalCloseBtn = document.getElementById('modalCloseBtn');
+      const btnCancel = document.getElementById('btnCancel');
+      const toolForm = document.getElementById('toolForm');
+      const toolNameInput = document.getElementById('toolName');
+      const toolLinkInput = document.getElementById('toolLink');
+      const toolImageInput = document.getElementById('toolImage');
+      const toolAltInput = document.getElementById('toolAlt');
+      const toolCategorySelect = document.getElementById('toolCategory');
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toastMessage');
+
+      // Error message elements
+      const toolNameError = document.getElementById('toolNameError');
+      const toolLinkError = document.getElementById('toolLinkError');
+      const toolImageError = document.getElementById('toolImageError');
+      const toolAltError = document.getElementById('toolAltError');
+      const toolCategoryError = document.getElementById('toolCategoryError');
+
+      // State
+      let tools = [];
+      let categories = [];
+      let editingToolId = null;
+
+      // Utility: Show toast notification
+      function showToast(message, duration = 3000) {
+        toastMessage.textContent = message;
+        toast.classList.remove('opacity-0', 'pointer-events-none');
+        toast.classList.add('opacity-100');
+        setTimeout(() => {
+          toast.classList.remove('opacity-100');
+          toast.classList.add('opacity-0');
+          toast.classList.add('pointer-events-none');
+        }, duration);
+      }
+
+      // Utility: Validate URL format
+      function isValidUrl(string) {
+        try {
+          new URL(string);
+          return true;
+        } catch {
+          return false;
+        }
+      }
+
+      // Save data to localStorage
+      function saveData() {
+        localStorage.setItem(STORAGE_KEY_TOOLS, JSON.stringify(tools));
+        localStorage.setItem(STORAGE_KEY_CATEGORIES, JSON.stringify(categories));
+      }
+
+      // Load data from localStorage
+      function loadData() {
+        const storedTools = localStorage.getItem(STORAGE_KEY_TOOLS);
+        const storedCategories = localStorage.getItem(STORAGE_KEY_CATEGORIES);
+        tools = storedTools ? JSON.parse(storedTools) : [];
+        categories = storedCategories ? JSON.parse(storedCategories) : [];
+        // If no categories, build dynamically from tools
+        if (categories.length === 0) {
+          const toolCats = tools.map(t => t.category).filter(Boolean);
+          categories = [...new Set(toolCats)];
+          saveData();
+        }
+      }
+
+      // Render categories list (for management)
+      function renderCategoriesList() {
+        categoriesList.innerHTML = '';
+        categories.forEach((cat, idx) => {
+          const li = document.createElement('li');
+          li.className = 'bg-blue-100 text-blue-800 px-3 py-1 rounded-full flex items-center gap-2 select-none';
+          li.setAttribute('data-index', idx);
+          li.setAttribute('role', 'listitem');
+          li.setAttribute('tabindex', '0');
+          li.textContent = cat;
+
+          // Add remove button for all categories (no static default)
+          const btnRemove = document.createElement('button');
+          btnRemove.setAttribute('aria-label', `Remove category ${cat}`);
+          btnRemove.className = 'text-blue-600 hover:text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded';
+          btnRemove.innerHTML = '<i class="fas fa-times"></i>';
+          btnRemove.addEventListener('click', (e) => {
+            e.stopPropagation();
+            removeCategory(idx);
+          });
+          li.appendChild(btnRemove);
+
+          categoriesList.appendChild(li);
+        });
+      }
+
+      // Render categories options in select dropdown
+      function renderCategoryOptions() {
+        toolCategorySelect.innerHTML = '';
+        categories.forEach((cat) => {
+          const option = document.createElement('option');
+          option.value = cat;
+          option.textContent = cat;
+          toolCategorySelect.appendChild(option);
+        });
+      }
+
+      // Render tools table rows
+      function renderToolsTable() {
+        // Clean up any existing views first
+        const existingMobileView = document.querySelector('.md\\:hidden');
+        if (existingMobileView) {
+          existingMobileView.remove();
+        }
+        toolsTableBody.innerHTML = '';
+        const table = toolsTableBody.closest('table');
+        
+        // Check for mobile viewport
+        const isMobile = window.innerWidth <= 720;
+        
+        if (tools.length === 0) {
+          if (isMobile) {
+            const emptyMessage = document.createElement('div');
+            emptyMessage.className = 'text-center py-6 text-gray-500 italic select-none md:hidden';
+            emptyMessage.textContent = 'No tools added yet. Use "Add Tool" to get started.';
+            table.parentElement.insertBefore(emptyMessage, table);
+            table.classList.add('hidden', 'md:table');
+          } else {
+            table.classList.remove('hidden', 'md:table');
+            const tr = document.createElement('tr');
+            const td = document.createElement('td');
+            td.colSpan = 5;
+            td.className = 'text-center py-6 text-gray-500 italic select-none';
+            td.textContent = 'No tools added yet. Use "Add Tool" to get started.';
+            tr.appendChild(td);
+            toolsTableBody.appendChild(tr);
+          }
+          return;
+        }
+
+        if (isMobile) {
+          // Mobile card view grouped by category
+          const container = document.createElement('div');
+          container.className = 'md:hidden space-y-6 mb-6';
+
+          // Group tools by category
+          const toolsByCategory = categories.reduce((acc, category) => {
+            acc[category] = tools.filter(tool => tool.category === category);
+            return acc;
+          }, {});
+
+          // Create section for each category
+          categories.forEach(category => {
+            const categoryTools = toolsByCategory[category];
+            if (categoryTools.length === 0) return;
+
+            // Category header
+            const categorySection = document.createElement('div');
+            categorySection.className = 'space-y-3';
+            
+            const categoryHeader = document.createElement('h3');
+            categoryHeader.className = 'text-lg font-semibold text-gray-800 flex items-center gap-2';
+            categoryHeader.innerHTML = `
+              <i class="fas fa-folder text-blue-600"></i>
+              <span>${category}</span>
+              <span class="text-sm font-normal text-gray-500">(${categoryTools.length})</span>
+            `;
+            categorySection.appendChild(categoryHeader);
+
+            // Tools in this category
+            categoryTools.forEach((tool, idx) => {
+              const card = document.createElement('div');
+              card.className = 'mobile-card';
+              
+              const header = document.createElement('div');
+              header.className = 'mobile-card-header';
+              
+              const imgWrapper = document.createElement('div');
+              imgWrapper.className = 'flex items-center gap-3';
+              
+              const img = document.createElement('img');
+              img.src = tool.image;
+              img.alt = tool.alt;
+              img.width = 40;
+              img.height = 40;
+              img.className = 'rounded-md object-contain';
+              
+              const nameText = document.createElement('strong');
+              nameText.className = 'text-gray-900';
+              nameText.textContent = tool.name;
+              
+              imgWrapper.appendChild(img);
+              imgWrapper.appendChild(nameText);
+              
+              const actions = document.createElement('div');
+              actions.className = 'flex items-center gap-3';
+              
+              const editBtn = document.createElement('button');
+              editBtn.className = 'text-blue-600 p-1';
+              editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+              editBtn.addEventListener('click', () => openEditToolModal(tools.indexOf(tool)));
+              
+              const deleteBtn = document.createElement('button');
+              deleteBtn.className = 'text-red-600 p-1';
+              deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+              deleteBtn.addEventListener('click', () => deleteTool(tools.indexOf(tool)));
+              
+              actions.appendChild(editBtn);
+              actions.appendChild(deleteBtn);
+              
+              header.appendChild(imgWrapper);
+              header.appendChild(actions);
+              
+              const details = document.createElement('div');
+              details.className = 'mobile-grid text-sm';
+              
+              const link = document.createElement('a');
+              link.href = tool.link;
+              link.target = '_blank';
+              link.rel = 'noopener noreferrer';
+              link.className = 'text-blue-600 truncate';
+              link.innerHTML = `<i class="fas fa-link mr-1"></i> ${tool.link}`;
+              
+              details.appendChild(link);
+              
+              card.appendChild(header);
+              card.appendChild(details);
+              
+              categorySection.appendChild(card);
+            });
+
+            container.appendChild(categorySection);
+          });
+          
+          table.parentElement.insertBefore(container, table);
+          table.classList.add('hidden', 'md:table');
+        } else {
+          // Desktop table view grouped by category
+          table.classList.remove('hidden', 'md:table');
+
+          // Group tools by category
+          const toolsByCategory = categories.reduce((acc, category) => {
+            acc[category] = tools.filter(tool => tool.category === category);
+            return acc;
+          }, {});
+
+          // Create sections for each category
+          categories.forEach(category => {
+            const categoryTools = toolsByCategory[category];
+            if (categoryTools.length === 0) return;
+
+            // Category header row
+            const categoryHeaderRow = document.createElement('tr');
+            const categoryHeaderCell = document.createElement('td');
+            categoryHeaderCell.colSpan = 5;
+            categoryHeaderCell.className = 'px-4 py-3 bg-gray-50 border-t border-b text-gray-800';
+            
+            const headerContent = document.createElement('div');
+            headerContent.className = 'flex items-center gap-2';
+            headerContent.innerHTML = `
+              <i class="fas fa-folder text-blue-600"></i>
+              <span class="font-semibold">${category}</span>
+              <span class="text-sm text-gray-500">(${categoryTools.length})</span>
+            `;
+            
+            categoryHeaderCell.appendChild(headerContent);
+            categoryHeaderRow.appendChild(categoryHeaderCell);
+            toolsTableBody.appendChild(categoryHeaderRow);
+
+            // Tool rows for this category
+            categoryTools.forEach(tool => {
+              const tr = document.createElement('tr');
+              tr.className = 'hover:bg-blue-50 transition-colors';
+
+              // Image cell
+              const tdImg = document.createElement('td');
+              tdImg.className = 'px-4 py-3';
+              const img = document.createElement('img');
+              img.src = tool.image;
+              img.alt = tool.alt;
+              img.width = 48;
+              img.height = 48;
+              img.className = 'rounded-md object-contain';
+              tdImg.appendChild(img);
+              tr.appendChild(tdImg);
+
+              // Name cell
+              const tdName = document.createElement('td');
+              tdName.className = 'px-4 py-3 font-semibold text-gray-900';
+              tdName.textContent = tool.name;
+              tr.appendChild(tdName);
+
+              // Category cell
+              const tdCat = document.createElement('td');
+              tdCat.className = 'px-4 py-3 text-gray-700';
+              tdCat.textContent = tool.category;
+              tr.appendChild(tdCat);
+
+              // Link cell
+              const tdLink = document.createElement('td');
+              tdLink.className = 'px-4 py-3 text-blue-600 hover:underline truncate max-w-xs';
+              const a = document.createElement('a');
+              a.href = tool.link;
+              a.target = '_blank';
+              a.rel = 'noopener noreferrer';
+              a.textContent = tool.link;
+              a.title = tool.link;
+              tdLink.appendChild(a);
+              tr.appendChild(tdLink);
+
+              // Actions cell
+              const tdActions = document.createElement('td');
+              tdActions.className = 'px-4 py-3 text-center space-x-3';
+              
+              const btnEdit = document.createElement('button');
+              btnEdit.className = 'text-blue-600 hover:text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-400 rounded';
+              btnEdit.setAttribute('aria-label', `Edit tool ${tool.name}`);
+              btnEdit.innerHTML = '<i class="fas fa-edit"></i>';
+              btnEdit.addEventListener('click', () => openEditToolModal(tools.indexOf(tool)));
+              tdActions.appendChild(btnEdit);
+
+              const btnDelete = document.createElement('button');
+              btnDelete.className = 'text-red-600 hover:text-red-900 focus:outline-none focus:ring-2 focus:ring-red-400 rounded';
+              btnDelete.setAttribute('aria-label', `Delete tool ${tool.name}`);
+              btnDelete.innerHTML = '<i class="fas fa-trash-alt"></i>';
+              btnDelete.addEventListener('click', () => deleteTool(tools.indexOf(tool)));
+              tdActions.appendChild(btnDelete);
+
+              tr.appendChild(tdActions);
+              toolsTableBody.appendChild(tr);
+            });
+          });
+        }
+      }
+
+      // Add window resize listener to handle responsive layout
+      window.addEventListener('resize', () => {
+        renderToolsTable();
+      });
+
+      // Add new category
+      function addCategory() {
+        const newCat = newCategoryInput.value.trim();
+        if (!newCat) {
+          showToast('Category name cannot be empty.');
+          return;
+        }
+        if (categories.includes(newCat)) {
+          showToast('Category already exists.');
+          return;
+        }
+        categories.push(newCat);
+        saveData();
+        renderCategoriesList();
+        renderCategoryOptions();
+        newCategoryInput.value = '';
+        showToast(`Category "${newCat}" added.`);
+      }
+
+      // Remove category by index
+      function removeCategory(idx) {
+        const catToRemove = categories[idx];
+        // Check if any tool uses this category
+        const used = tools.some((t) => t.category === catToRemove);
+        if (used) {
+          alert(`Cannot remove category "${catToRemove}" because it is assigned to one or more tools.`);
+          return;
+        }
+        categories.splice(idx, 1);
+        saveData();
+        renderCategoriesList();
+        renderCategoryOptions();
+        showToast(`Category "${catToRemove}" removed.`);
+      }
+
+      // Open modal to add new tool
+      function openAddToolModal() {
+        editingToolId = null;
+        modalTool.querySelector('h3').textContent = 'Add New Tool';
+        toolForm.reset();
+        clearValidationErrors();
+        renderCategoryOptions();
+        openModal();
+      }
+
+      // Open modal to edit existing tool
+      function openEditToolModal(idx) {
+        editingToolId = idx;
+        const tool = tools[idx];
+        modalTool.querySelector('h3').textContent = `Edit Tool: ${tool.name}`;
+        toolNameInput.value = tool.name;
+        toolLinkInput.value = tool.link;
+        toolImageInput.value = tool.image;
+        toolAltInput.value = tool.alt;
+        renderCategoryOptions();
+        toolCategorySelect.value = tool.category;
+        clearValidationErrors();
+        openModal();
+      }
+
+      // Open modal and backdrop
+      function openModal() {
+        modalBackdrop.classList.remove('hidden');
+        modalTool.classList.remove('hidden');
+        modalTool.querySelector('form').scrollTop = 0;
+        toolNameInput.focus();
+      }
+
+      // Close modal and backdrop
+      function closeModal() {
+        modalBackdrop.classList.add('hidden');
+        modalTool.classList.add('hidden');
+        editingToolId = null;
+      }
+
+      // Clear validation error messages
+      function clearValidationErrors() {
+        [toolNameError, toolLinkError, toolImageError, toolAltError, toolCategoryError].forEach((el) => {
+          el.classList.add('hidden');
+        });
+      }
+
+      // Validate form inputs, show errors if invalid, return boolean
+      function validateForm() {
+        clearValidationErrors();
+        let valid = true;
+
+        if (!toolNameInput.value.trim()) {
+          toolNameError.classList.remove('hidden');
+          valid = false;
+        }
+        if (!toolLinkInput.value.trim() || !isValidUrl(toolLinkInput.value.trim())) {
+          toolLinkError.classList.remove('hidden');
+          valid = false;
+        }
+        if (!toolImageInput.value.trim() || !isValidUrl(toolImageInput.value.trim())) {
+          toolImageError.classList.remove('hidden');
+          valid = false;
+        }
+        if (!toolAltInput.value.trim()) {
+          toolAltError.classList.remove('hidden');
+          valid = false;
+        }
+        if (!toolCategorySelect.value) {
+          toolCategoryError.classList.remove('hidden');
+          valid = false;
+        }
+        return valid;
+      }
+
+      // Save tool (add or update)
+      function saveTool(e) {
+        e.preventDefault();
+        if (!validateForm()) return;
+
+        const newTool = {
+          name: toolNameInput.value.trim(),
+          link: toolLinkInput.value.trim(),
+          image: toolImageInput.value.trim(),
+          alt: toolAltInput.value.trim(),
+          category: toolCategorySelect.value,
+        };
+
+        // If new category is used, add it dynamically
+        if (!categories.includes(newTool.category)) {
+          categories.push(newTool.category);
+        }
+
+        if (editingToolId !== null) {
+          tools[editingToolId] = newTool;
+          showToast(`Tool "${newTool.name}" updated.`);
+        } else {
+          tools.push(newTool);
+          showToast(`Tool "${newTool.name}" added.`);
+        }
+        saveData();
+        renderToolsTable();
+        renderCategoriesList();
+        renderCategoryOptions();
+        closeModal();
+      }
+
+      // Delete tool by index with confirmation
+      function deleteTool(idx) {
+        const tool = tools[idx];
+        if (confirm(`Are you sure you want to delete the tool "${tool.name}"? This action cannot be undone.`)) {
+          tools.splice(idx, 1);
+          saveData();
+          renderToolsTable();
+          showToast(`Tool "${tool.name}" deleted.`);
+        }
+      }
+
+      // Reset to example data
+      btnResetExampleData.addEventListener('click', function() {
+        if (confirm('Confirm for updating changes? Unsaved progress will be lost.')) {
+          localStorage.removeItem('web_tools_list');
+          localStorage.removeItem('web_tools_categories');
+          location.reload();
+        }
+      });
+
+      // Initialize app
+      function init() {
+        loadData();
+        renderCategoriesList();
+        renderToolsTable();
+
+        // Event listeners
+        btnAddCategory.addEventListener('click', addCategory);
+        btnAddTool.addEventListener('click', openAddToolModal);
+        modalCloseBtn.addEventListener('click', closeModal);
+        btnCancel.addEventListener('click', closeModal);
+        modalBackdrop.addEventListener('click', closeModal);
+        toolForm.addEventListener('submit', saveTool);
+
+        // Keyboard accessibility: close modal on Escape
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && !modalTool.classList.contains('hidden')) {
+            closeModal();
+          }
+        });
+      }
+
+      init();
+    })();
+  </script>
+  <footer class="bg-white border-t border-gray-200 py-6 mt-auto">
+   <div class="max-w-7xl mx-auto px-6 text-center text-gray-500 text-sm select-none">
+    © No Right Reserverd. Free of Use | Made with love by NDMH ❤️
+   </div>
+  </footer>
+</body>
+</html>

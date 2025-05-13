@@ -1,0 +1,134 @@
+/* === Root Variables === */
+:root {
+  --indigo: #4f46e5;
+  --indigo-light: #eef2ff;
+  --disabled: #cbd5e1;
+}
+
+/* === Layout === */
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans";
+  background: linear-gradient(135deg, #eef2ff 0%, #f8fafc 100%);
+  min-height: 100vh;
+}
+main#panel {
+  box-shadow: 0 8px 32px 0 rgba(79,70,229,0.10), 0 1.5px 4px 0 rgba(0,0,0,0.03);
+  border: 1px solid #e0e7ff;
+  background: #fff;
+}
+
+/* === Typography === */
+h1, h2 {
+  letter-spacing: -0.5px;
+}
+
+#resultContainer {
+  font-size: 1.08rem;
+  letter-spacing: 0.01em;
+}
+
+/* === Preview Styles === */
+#previewContainer img {
+  border: 1.5px solid #e0e7ff;
+  background: #f8fafc;
+  padding: 0.5rem;
+}
+#previewContainer pre, #previewContainer div {
+  font-family: 'JetBrains Mono', 'Fira Mono', 'Menlo', 'Consolas', monospace;
+  font-size: 1rem;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* === Button Styles === */
+#convertBtn {
+  box-shadow: 0 2px 8px 0 #6366f1cc;
+}
+#convertBtn:disabled {
+  opacity: 0.5;
+  box-shadow: none;
+}
+.btn-click:active {
+  animation: click-scale 0.25s ease-out forwards;
+}
+
+/* === State/Utility Classes === */
+.disabled-btn {
+  background-color: #f3f4f6 !important;
+  border-color: var(--disabled) !important;
+  color: var(--disabled) !important;
+  opacity: 0.7;
+}
+.disabled-btn:hover {
+  cursor: not-allowed;
+  background-color: #e5e7eb !important;
+}
+.animate-pulse-fade {
+  animation: pulse-fade 3s ease-in-out infinite;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+.drop-active {
+  border-color: var(--indigo);
+  background-color: var(--indigo-light);
+  box-shadow: 0 0 0 2px #6366f1;
+}
+.file-selected label:not(:has(input:disabled)) > span:hover {
+  background-color: var(--indigo);
+  color: white;
+  cursor: pointer;
+  animation: none;
+  box-shadow: 0 2px 8px 0 #6366f1cc;
+}
+input[type="radio"]:checked + span.animate-pulse-fade {
+  background-color: var(--indigo);
+  border-color: var(--indigo);
+  color: white;
+  animation: none;
+  box-shadow: 0 2px 8px 0 #6366f1cc;
+}
+
+/* === Docx Preview Styles === */
+.docx-wrapper, .docx {
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+.docx {
+  transform: translateX(-200px);
+  padding-right: 36pt !important;
+}
+
+/* === Animations === */
+@keyframes pulse-fade {
+  0%, 100% {
+    opacity: 1;
+    background-color: var(--indigo-light);
+    border-color: var(--indigo);
+  }
+  50% {
+    opacity: 0.6;
+    background-color: #c7d2fe;
+    border-color: #4338ca;
+  }
+}
+@keyframes click-scale {
+  0% { transform: scale(1) }
+  50% { transform: scale(0.95) }
+  100% { transform: scale(1) }
+}
+
+/* === Responsive === */
+@media (max-width: 640px) {
+  main#panel {
+    padding: 1rem;
+  }
+  #previewContainer pre, #previewContainer div {
+    font-size: 0.95rem;
+    padding: 0.5rem;
+  }
+}
