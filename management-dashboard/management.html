@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
@@ -57,6 +58,10 @@
       outline-offset: 2px;
     }
 
+    .fa-lg{
+      line-height: 1;
+    }
+
     /* Mobile-specific styles */
     @media (max-width: 720px) {
       .mobile-stack {
@@ -113,7 +118,7 @@
 <body class="min-h-screen flex flex-col">
   <header class="bg-white shadow sticky top-0 z-40">
     <nav class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center md:gap-2">
-      <a href="./index.html" class="flex items-center space-x-2 text-blue-700 font-extrabold text-xl hover:text-blue-800 transition">
+      <a href="../index.html" class="flex items-center space-x-2 text-blue-700 font-extrabold text-xl hover:text-blue-800 transition">
         <i class="fas fa-tools"></i>
         <span>Web Tools</span>
       </a>
@@ -135,6 +140,12 @@
           <i class="fas fa-plus"></i>
           <span>Add</span>
         </button>
+        <a href="../index.html"
+          class="bg-blue-600 text-white rounded-full shadow-lg p-2 hover:bg-blue-700 transition z-50 flex items-center gap-2 focus:outline-none focus:ring-4 focus:ring-blue-300"
+          title="Back to Main Page"
+          style="box-shadow: 0 4px 24px 0 rgba(37,99,235,0.15);">
+          <i class="fas fa-home fa-lg"></i>
+        </a>
       </div>
     </nav>
   </header>
@@ -322,7 +333,7 @@
     <span id="toastMessage" class="font-medium text-sm"></span>
   </div>
 
-  <script src="web-tools-list.js"></script>
+  <script src="./web-tools-list.js"></script>
   <script>
     (() => {
       // Data keys for localStorage
@@ -514,7 +525,7 @@
               imgWrapper.className = 'flex items-center gap-3';
               
               const img = document.createElement('img');
-              img.src = tool.image;
+              img.src = '../'+tool.image;
               img.alt = tool.alt;
               img.width = 40;
               img.height = 40;

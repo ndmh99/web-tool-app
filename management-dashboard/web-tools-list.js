@@ -11,22 +11,22 @@ const web_tools_categories = [
 const web_tools_list = [
   {
     name: "File Extension Converter",
-    link: "./tools/conversion/file_ext_convert/index.html",
-    image: "./tools/conversion/file_ext_convert/img/logo.png",
+    link: "tools/conversion/file_ext_convert/index.html",
+    image: "tools/conversion/file_ext_convert/img/logo.png",
     alt: "File Extension Converter Logo",
     category: "Conversion"
   },
   {
     name: "Simple Paint",
-    link: "./tools/design/simple_paint/index.html",
-    image: "./tools/design/simple_paint/img/logo.png",
+    link: "tools/design/simple_paint/index.html",
+    image: "tools/design/simple_paint/img/logo.png",
     alt: "Simple Paint Logo",
     category: "Design"
   },
   {
     name: "FSWD Crash Course",
-    link: "./tools/others/fswd_crash_course/index.html",
-    image: "./tools/others/fswd_crash_course/img/logo.png",
+    link: "tools/others/fswd_crash_course/index.html",
+    image: "tools/others/fswd_crash_course/img/logo.png",
     alt: "FSWD Crash Course Logo",
     category: "Others"
   }

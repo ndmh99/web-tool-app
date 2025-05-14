@@ -1,217 +1,247 @@
+<!DOCTYPE html>
 <html class="scroll-smooth" lang="en">
- <head>
+<head>
   <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1" name="viewport"/>
-  <title>
-   Minimal Web Tools Collection
-  </title>
-  <script src="https://cdn.tailwindcss.com">
-  </script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Minimal Web Tools Collection</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+  <!-- Google Fonts: Inter -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"/>
   <style>
-   body {
-      font-family: 'Inter', sans-serif;
-    }
-    /* subtle fade-in animation for cards */
+    /* Use Inter font for the whole body */
+    body { font-family: 'Inter', sans-serif; }
+    /* Subtle fade-in animation for cards */
     .fade-in {
       animation: fadeInUp 0.5s ease forwards;
       opacity: 0;
       transform: translateY(10px);
     }
     @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      to { opacity: 1; transform: translateY(0); }
     }
-    /* focus ring for accessibility */
+    /* Focus ring for accessibility */
     a:focus {
       outline: 2px solid #2563eb;
       outline-offset: 2px;
     }
-    img {
-      border-radius: 10px;
-    }
-    /* Remove focus outline and box-shadow */
+    img { border-radius: 10px; }
+    /* Remove focus outline and box-shadow for buttons */
     button:focus {
       outline: none !important;
       box-shadow: none !important;
     }
   </style>
- </head>
- <body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col">
+</head>
+<body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col">
+  <!-- Header with navigation and mobile drawer -->
   <header class="sticky top-0 bg-white shadow-md z-30">
-   <nav class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-    <a class="text-2xl font-semibold text-blue-600 flex items-center space-x-2" href="#home">
-     <i class="fas fa-tools"></i>
-     <span>Web Tools</span>
-    </a>
-    <button aria-label="Open menu" class="md:hidden text-gray-700 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600" id="menu-btn">
-     <i class="fas fa-bars fa-lg"></i>
-    </button>
-    <ul class="hidden md:flex text-gray-700 font-medium [&>li:not(:last-child)]:mr-8" id="menu"></ul>
-   </nav>
-   <!-- Mobile Drawer -->
-   <div id="mobile-drawer-backdrop" class="fixed inset-0 bg-black bg-opacity-30 z-40 hidden"></div>
-   <aside id="mobile-drawer" class="fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-50 transform -translate-x-full transition-transform duration-200 ease-in-out md:hidden">
-     <nav class="flex flex-col p-6 space-y-4 text-lg font-medium text-gray-700" id="mobile-drawer-menu"></nav>
-   </aside>
+    <nav class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <!-- Logo and title -->
+      <a href="#home" class="text-2xl font-semibold text-blue-600 flex items-center space-x-2">
+        <i class="fas fa-tools"></i>
+        <span>Web Tools</span>
+      </a>
+      <!-- Mobile menu button (hamburger) -->
+      <button id="menu-btn" aria-label="Open menu"
+        class="md:hidden text-gray-700 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600">
+        <i class="fas fa-bars fa-lg"></i>
+      </button>
+      <!-- Desktop navigation menu (populated dynamically) -->
+      <ul id="menu" class="hidden md:flex text-gray-700 font-medium [&>li:not(:last-child)]:mr-8"></ul>
+    </nav>
+    <!-- Mobile Drawer Backdrop -->
+    <div id="mobile-drawer-backdrop" class="fixed inset-0 bg-black bg-opacity-30 z-40 hidden"></div>
+    <!-- Mobile Drawer Navigation -->
+    <aside id="mobile-drawer"
+      class="fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-50 transform -translate-x-full transition-transform duration-200 ease-in-out md:hidden">
+      <nav id="mobile-drawer-menu" class="flex flex-col p-6 space-y-4 text-lg font-medium text-gray-700"></nav>
+    </aside>
   </header>
+
+  <!-- Main content area -->
   <main class="flex-grow max-w-7xl mx-auto px-6 py-10">
-   <section class="mb-16 text-center max-w-3xl mx-auto" id="home">
-    <h1 class="text-4xl md:text-5xl font-extrabold text-blue-700 mb-4 leading-tight">
-     Hub for Essential Web Tools
-    </h1>
-    <p class="text-gray-600 text-lg md:text-xl">
-     Quickly access customizable collection of web tools.
-    </p>
-   </section>
-   <div id="toolsContainer"></div>
+    <!-- Hero section -->
+    <section id="home" class="mb-16 text-center max-w-3xl mx-auto">
+      <h1 class="text-4xl md:text-5xl font-extrabold text-blue-700 mb-4 leading-tight">
+        Hub for Essential Web Tools
+      </h1>
+      <p class="text-gray-600 text-lg md:text-xl">
+        Quickly access customizable collection of web tools.
+      </p>
+      <!-- Link to management dashboard -->
+      <a href="./management-dashboard/management.html"
+        class="inline-block mt-6 px-6 py-3 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition font-semibold text-lg">
+        <i class="fas fa-cog mr-2"></i>Open Management Dashboard
+      </a>
+    </section>
+    <!-- Tools container (populated dynamically) -->
+    <div id="toolsContainer"></div>
   </main>
+
+  <!-- Footer -->
   <footer class="bg-white border-t border-gray-200 py-6 mt-auto">
-   <div class="max-w-7xl mx-auto px-6 text-center text-gray-500 text-sm select-none">
-    © No Right Reserverd. Free of Use | Made with love by NDMH ❤️
-   </div>
+    <div class="max-w-7xl mx-auto px-6 text-center text-gray-500 text-sm select-none">
+      © No Right Reserverd. Free of Use | Made with love by NDMH ❤️
+    </div>
   </footer>
+
+  <!-- Main JavaScript -->
   <script>
-   const menuBtn = document.getElementById('menu-btn');
-   const menu = document.getElementById('menu');
-   const mobileDrawer = document.getElementById('mobile-drawer');
-   const mobileDrawerMenu = document.getElementById('mobile-drawer-menu');
-   const mobileDrawerBackdrop = document.getElementById('mobile-drawer-backdrop');
+    // Elements for navigation and mobile drawer
+    const menuBtn = document.getElementById('menu-btn');
+    const menu = document.getElementById('menu');
+    const mobileDrawer = document.getElementById('mobile-drawer');
+    const mobileDrawerMenu = document.getElementById('mobile-drawer-menu');
+    const mobileDrawerBackdrop = document.getElementById('mobile-drawer-backdrop');
 
-   menuBtn.addEventListener('click', () => {
-     mobileDrawer.classList.remove('-translate-x-full');
-     mobileDrawerBackdrop.classList.remove('hidden');
-   });
-   mobileDrawerBackdrop.addEventListener('click', closeMobileDrawer);
-   function closeMobileDrawer() {
-     mobileDrawer.classList.add('-translate-x-full');
-     mobileDrawerBackdrop.classList.add('hidden');
-   }
+    // Open mobile drawer
+    menuBtn.addEventListener('click', () => {
+      mobileDrawer.classList.remove('-translate-x-full');
+      mobileDrawerBackdrop.classList.remove('hidden');
+    });
 
-   // Dynamic navigation rendering from localStorage
-   function renderNavCategories() {
-     menu.innerHTML = '';
-     mobileDrawerMenu.innerHTML = '';
-     const categories = JSON.parse(localStorage.getItem('web_tools_categories') || '[]');
-     categories.forEach((cat, idx) => {
-       // Desktop nav
-       const li = document.createElement('li');
-       const anchor = document.createElement('a');
-       anchor.className = 'hover:text-blue-600 transition';
-       anchor.href = `#category-${cat.toLowerCase().replace(/\s+/g, '-')}`;
-       anchor.textContent = cat;
-       li.appendChild(anchor);
-       menu.appendChild(li);
-       // Mobile drawer nav
-       const mAnchor = document.createElement('a');
-       mAnchor.className = 'hover:text-blue-600 transition px-2 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-600';
-       mAnchor.href = `#category-${cat.toLowerCase().replace(/\s+/g, '-')}`;
-       mAnchor.textContent = cat;
-       mAnchor.addEventListener('click', closeMobileDrawer);
-       // Add border except for last item
-       if (idx < categories.length - 1) {
-         mAnchor.className += ' border-b border-gray-200';
-       }
-       mobileDrawerMenu.appendChild(mAnchor);
-     });
-   }
-   renderNavCategories();
-   // Update nav if categories change
-   window.addEventListener('storage', function (e) {
-     if (e.key === 'web_tools_categories') {
-       renderNavCategories();
-     }
-   });
+    // Close mobile drawer
+    mobileDrawerBackdrop.addEventListener('click', closeMobileDrawer);
+    function closeMobileDrawer() {
+      mobileDrawer.classList.add('-translate-x-full');
+      mobileDrawerBackdrop.classList.add('hidden');
+    }
 
-   // Dynamic tools rendering from localStorage
-   function renderToolsFromStorage() {
-     const toolsContainer = document.getElementById('toolsContainer');
-     toolsContainer.innerHTML = '';
-     const tools = JSON.parse(localStorage.getItem('web_tools_list') || '[]');
-     const categories = JSON.parse(localStorage.getItem('web_tools_categories') || '[]');
-     if (!categories.length) {
-       toolsContainer.innerHTML = '<p class="text-center text-gray-500">No categories found. Please add categories in the management dashboard.</p>';
-       return;
-     }
-     categories.forEach((cat, cIdx) => {
-       const section = document.createElement('section');
-       section.className = 'mb-16';
-       section.id = `category-${cat.toLowerCase().replace(/\s+/g, '-')}`;
-       // Expand/collapse state
-       const isExpanded = false;
-       // Header with expand/collapse button
-       const header = document.createElement('button');
-       header.type = 'button';
-       header.className = 'w-full flex items-center justify-between text-left text-3xl font-semibold text-blue-700 mb-4 border-b border-blue-200 pb-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition';
-       header.setAttribute('aria-expanded', 'false');
-       header.innerHTML = `
-         <span><i class="fas fa-folder mr-2"></i>${cat} Tools</span>
-         <span class="ml-2 transition-transform duration-200" style="font-size:1.2rem"><i class="fas fa-chevron-down"></i></span>
-       `;
-       // Tools grid (initially hidden)
-       const grid = document.createElement('div');
-       grid.className = 'grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 max-h-0 overflow-hidden transition-all duration-300';
-       grid.style.paddingBottom = '0';
-       const catTools = tools.filter(t => t.category === cat);
-       if (!catTools.length) {
-         grid.innerHTML = '<div class="col-span-full text-gray-400 italic text-center">No tools in this category.</div>';
-       } else {
-         catTools.forEach((tool, tIdx) => {
-           const a = document.createElement('a');
-           a.className = 'fade-in group bg-white rounded-lg shadow-md p-6 flex flex-col items-center text-center hover:shadow-xl transition-shadow duration-300 ring-0 ring-transparent focus:ring-transparent';
-           a.href = tool.link;
-           a.target = '_blank';
-           a.rel = 'noopener noreferrer';
-           a.style.animationDelay = `${0.05 + tIdx * 0.05}s`;
-           a.innerHTML = `
-             <img alt="${tool.alt}" class="mb-4 w-20 h-20 object-contain" height="80" loading="lazy" src=${tool.image} width="80"/>
-             <h3 class="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition">${tool.name}</h3>
-             <p class="text-gray-500 mt-1 text-sm">${tool.link.startsWith('http://') || tool.link.startsWith('https://') ? tool.link : 'Local Tool'}</p>
-           `;
-           grid.appendChild(a);
-         });
-       }
-       // Expand/collapse logic
-       header.addEventListener('click', function () {
-         const expanded = header.getAttribute('aria-expanded') === 'true';
-         header.setAttribute('aria-expanded', String(!expanded));
-         if (!expanded) {
-           grid.classList.remove('max-h-0', 'mt-0');
-           grid.classList.add('max-h-[2000px]', 'mt-6');
-           grid.style.paddingBottom = '1.5rem';
-           header.querySelector('i.fas.fa-chevron-down').classList.add('rotate-180');
-         } else {
-           grid.classList.add('max-h-0', 'mt-0');
-           grid.classList.remove('max-h-[2000px]', 'mt-6');
-           grid.style.paddingBottom = '0';
-           header.querySelector('i.fas.fa-chevron-down').classList.remove('rotate-180');
-         }
-       });
-       // Start collapsed
-       grid.classList.add('max-h-0', 'mt-0');
-       section.appendChild(header);
-       section.appendChild(grid);
-       toolsContainer.appendChild(section);
-     });
-   }
-   renderToolsFromStorage();
-   // Expand the first category by default
-   setTimeout(() => {
-     const firstHeader = document.querySelector('#toolsContainer section button');
-     if (firstHeader && firstHeader.getAttribute('aria-expanded') === 'false') {
-       firstHeader.click();
-     }
-   }, 0);
-   // Sync updates from dashboard in real time
-   window.addEventListener('storage', function (e) {
-     if (e.key === 'web_tools_list' || e.key === 'web_tools_categories') {
-       renderToolsFromStorage();
-     }
-   });
+    /**
+     * Render navigation categories from localStorage.
+     * Populates both desktop and mobile navigation menus.
+     */
+    function renderNavCategories() {
+      menu.innerHTML = '';
+      mobileDrawerMenu.innerHTML = '';
+      const categories = JSON.parse(localStorage.getItem('web_tools_categories') || '[]');
+      categories.forEach((cat, idx) => {
+        // Desktop nav
+        const li = document.createElement('li');
+        const anchor = document.createElement('a');
+        anchor.className = 'hover:text-blue-600 transition';
+        anchor.href = `#category-${cat.toLowerCase().replace(/\s+/g, '-')}`;
+        anchor.textContent = cat;
+        li.appendChild(anchor);
+        menu.appendChild(li);
+        // Mobile drawer nav
+        const mAnchor = document.createElement('a');
+        mAnchor.className = 'hover:text-blue-600 transition px-2 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-600';
+        mAnchor.href = `#category-${cat.toLowerCase().replace(/\s+/g, '-')}`;
+        mAnchor.textContent = cat;
+        mAnchor.addEventListener('click', closeMobileDrawer);
+        // Add border except for last item
+        if (idx < categories.length - 1) {
+          mAnchor.className += ' border-b border-gray-200';
+        }
+        mobileDrawerMenu.appendChild(mAnchor);
+      });
+    }
+    renderNavCategories();
+
+    // Update navigation if categories change in another tab/window
+    window.addEventListener('storage', function (e) {
+      if (e.key === 'web_tools_categories') {
+        renderNavCategories();
+      }
+    });
+
+    /**
+     * Render tools grouped by category from localStorage.
+     * Each category is collapsible and shows the number of tools.
+     */
+    function renderToolsFromStorage() {
+      const toolsContainer = document.getElementById('toolsContainer');
+      toolsContainer.innerHTML = '';
+      const tools = JSON.parse(localStorage.getItem('web_tools_list') || '[]');
+      const categories = JSON.parse(localStorage.getItem('web_tools_categories') || '[]');
+      if (!categories.length) {
+        toolsContainer.innerHTML = '<p class="text-center text-gray-500">No categories found. Please add categories in the management dashboard.</p>';
+        return;
+      }
+      categories.forEach((cat, cIdx) => {
+        const section = document.createElement('section');
+        section.className = 'mb-16';
+        section.id = `category-${cat.toLowerCase().replace(/\s+/g, '-')}`;
+        // Header with expand/collapse button and tool count
+        const header = document.createElement('button');
+        header.type = 'button';
+        header.className = 'w-full flex items-center justify-between text-left text-3xl font-semibold text-blue-700 mb-4 border-b border-blue-200 pb-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition';
+        header.setAttribute('aria-expanded', 'false');
+        const catTools = tools.filter(t => t.category === cat);
+        header.innerHTML = `
+          <span>
+            <i class="fas fa-folder mr-2"></i>
+            ${cat} Tools
+            <span class="text-base font-normal text-gray-500">(${catTools.length})</span>
+          </span>
+          <span class="ml-2 transition-transform duration-200" style="font-size:1.2rem"><i class="fas fa-chevron-down"></i></span>
+        `;
+        // Tools grid (initially hidden)
+        const grid = document.createElement('div');
+        grid.className = 'grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 max-h-0 overflow-hidden transition-all duration-300';
+        grid.style.paddingBottom = '0';
+        if (!catTools.length) {
+          grid.innerHTML = '<div class="col-span-full text-gray-400 italic text-center">No tools in this category.</div>';
+        } else {
+          catTools.forEach((tool, tIdx) => {
+            const a = document.createElement('a');
+            a.className = 'fade-in group bg-white rounded-lg shadow-md p-6 flex flex-col items-center text-center hover:shadow-xl transition-shadow duration-300 ring-0 ring-transparent focus:ring-transparent';
+            // Use direct relative paths since tools folder is inside Web Tools App
+            a.href = tool.link;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            a.style.animationDelay = `${0.05 + tIdx * 0.05}s`;
+            a.innerHTML = `
+              <img alt="${tool.alt}" class="mb-4 w-20 h-20 object-contain" height="80" loading="lazy" src="${tool.image}" width="80"/>
+              <h3 class="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition">${tool.name}</h3>
+              <p class="text-gray-500 mt-1 text-sm">${tool.link.startsWith('http://') || tool.link.startsWith('https://') ? tool.link : 'Local Tool'}</p>
+            `;
+            grid.appendChild(a);
+          });
+        }
+        // Expand/collapse logic for category
+        header.addEventListener('click', function () {
+          const expanded = header.getAttribute('aria-expanded') === 'true';
+          header.setAttribute('aria-expanded', String(!expanded));
+          if (!expanded) {
+            grid.classList.remove('max-h-0', 'mt-0');
+            grid.classList.add('max-h-[2000px]', 'mt-6');
+            grid.style.paddingBottom = '1.5rem';
+            header.querySelector('i.fas.fa-chevron-down').classList.add('rotate-180');
+          } else {
+            grid.classList.add('max-h-0', 'mt-0');
+            grid.classList.remove('max-h-[2000px]', 'mt-6');
+            grid.style.paddingBottom = '0';
+            header.querySelector('i.fas.fa-chevron-down').classList.remove('rotate-180');
+          }
+        });
+        // Start collapsed
+        grid.classList.add('max-h-0', 'mt-0');
+        section.appendChild(header);
+        section.appendChild(grid);
+        toolsContainer.appendChild(section);
+      });
+    }
+    renderToolsFromStorage();
+
+    // Expand the first category by default after rendering
+    setTimeout(() => {
+      const firstHeader = document.querySelector('#toolsContainer section button');
+      if (firstHeader && firstHeader.getAttribute('aria-expanded') === 'false') {
+        firstHeader.click();
+      }
+    }, 0);
+
+    // Sync updates from dashboard in real time
+    window.addEventListener('storage', function (e) {
+      if (e.key === 'web_tools_list' || e.key === 'web_tools_categories') {
+        renderToolsFromStorage();
+      }
+    });
   </script>
-  <script src="web-tools-list.js"></script>
- </body>
+</body>
 </html>
