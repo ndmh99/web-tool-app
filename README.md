@@ -8,8 +8,8 @@
 </p>
 
 Welcome to **Minimal Web Tools Collection** – your all-in-one, customizable hub for essential web utilities!  
-Easily access, organize, and extend a modern suite of tools, all in a beautiful, responsive interface.  
-Perfect for developers, designers, students, and anyone who loves productivity! ✨
+Easily access, organize, and extend a suite of tools, all at ease.  
+Perfect for quick and simple use ✨
 
 ---
 
@@ -27,7 +27,7 @@ Perfect for developers, designers, students, and anyone who loves productivity! 
 ## 🚦 Getting Started
 
 1. **Clone or Download** this repository.
-2. Open `index.html` in your favorite modern web browser.
+2. Open `index.html` in your favorite web browser.
 3. Browse tools by category, or open the **Management Dashboard** (`management.html`) to customize your collection.
 4. Click any tool to launch it in a new tab!
 
@@ -51,9 +51,8 @@ Follow these steps to make it a permanent part of your toolbox:
        category: "YourCategory" // Use an existing or new category
      }
      ```
-   - (Optional) Add your category to `web_tools_categories` if it's new.
+   - Add your category to `web_tools_categories` if it's new.
 3. **Reload the app** (Click "Update Changes" button at top of `management.html` page).  
-   Your tool will now appear and persist, even if localStorage is cleared!
 
 ---
 
