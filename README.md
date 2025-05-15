@@ -169,6 +169,16 @@ Made with ❤️ by **NDMH**
 
 ---
 
+## 🔗 **Important Links**
+
+- [🌐 Project Homepage](https://github.com/ndmh99/web-tools-app)
+- [⬇️ Latest Release & All Versions](https://github.com/ndmh99/web-tools-app/releases)
+- [📖 Wiki & Documentation](https://github.com/ndmh99/web-tools-app/wiki)
+- [🐞 Issues & Bug Reports](https://github.com/ndmh99/web-tools-app/issues)
+- [🚀 Author Profile](https://github.com/ndmh99)
+
+---
+
 ## 🆓 **License**
 
 > This project is **free to use**.  
