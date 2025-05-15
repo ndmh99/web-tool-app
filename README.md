@@ -7,9 +7,9 @@
   <img src="https://img.shields.io/badge/License-Free-29b6f6" alt="Free License" />
 </p>
 
-Welcome to **Minimal Web Tools Collection** – *your all-in-one, customizable hub for essential web utilities!*  
-Easily access, organize, and extend a suite of tools, all at ease.  
-Perfect for quick and simple use ✨
+Welcome to **Minimal Web Tools Collection** – *A customizable hub for essential web utilities!*  
+Easily access, organize, and extend a suite of tools, all at ease for both online and offline use.  
+Perfect for quick and simple access ✨
 
 ---
 
@@ -25,16 +25,25 @@ Web Tools App/
 │   ├── conversion/
 │   │   └── file_ext_convert/
 │   │       ├── index.html
+│   │       ├── script.js
+│   │       ├── styles.css
+│   │       ├── ... (other files/folders)
 │   │       └── img/
 │   │           └── logo.png
 │   ├── design/
 │   │   └── simple_paint/
 │   │       ├── index.html
+│   │       ├── script.js
+│   │       ├── styles.css
+│   │       ├── ... (other files/folders)
 │   │       └── img/
 │   │           └── logo.png
 │   └── others/
 │       └── fswd_crash_course/
 │           ├── index.html
+│           ├── script.js
+│           ├── styles.css
+│           ├── ... (other files/folders)
 │           └── img/
 │               └── logo.png
 ├── README.md
@@ -55,13 +64,21 @@ Web Tools App/
 - 📱 **Responsive Design:** *Looks great on desktop and mobile, with smooth navigation.*
 - 💾 **Persistent Storage:** *Tools and categories are saved in your browser (localStorage).*
 - 🧩 **Easy Extension:** *Import your own local tools for permanent use.*
-- 🎨 **Modern UI:** *Built with Tailwind CSS and FontAwesome for a clean, accessible experience.*
+- 🎨 **Simple UI:** *Built with Tailwind CSS and FontAwesome for a clean, accessible experience.*
 
 ---
 
 ## 🚦 **Getting Started**
 
-1. **Clone or Download** this repository.
+1. **Download the published version** (3 ways) 
+   - Method 1 - Clone the repository
+      ```sh
+      git clone https://github.com/ndmh99/web-tools-app.git
+      ```
+   - Method 2 - Download the ZIP file
+      Go to the [Releases](https://github.com/ndmh99/web-tools-app/releases) page and download the latest published ZIP file and extract it.
+   - Method 3 - Use the automated BAT file
+      Download the provided `.bat` file from the release page (Windows OS Only). Run it and follow the prompts to automatically download and extract the latest version.
 2. Open `index.html` in your favorite web browser.
 3. Browse tools by category, or open the **Management Dashboard** (`management-dashboard/management.html`) to customize your collection.
 4. Click any tool to launch it in a new tab!
@@ -80,7 +97,7 @@ Follow these steps to make it a *permanent* part of your toolbox:
      ```js
      {
        name: "My Local Tool",
-       link: "tools/mytool/index.html",
+       link: "tools/mytool/filename.extension", // relative path to your tool
        image: "tools/mytool/logo.png", // or a placeholder image
        alt: "My Local Tool Logo",
        category: "YourCategory" // Use an existing or new category
@@ -107,7 +124,7 @@ You can also add, edit, or remove tools and categories directly from the **Manag
 4. **To edit or remove tools/categories:**  
    Use the edit (✏️) or delete (🗑️) icons next to each item.
 5. **To make a tool permanent for all users:**  
-   - Add it to `management-dashboard/web-tools-list.js` as described above.
+   - Add it to `management-dashboard/web-tools-list.js` as described above (for local tools, add into `tools` directory as well).
 
 ---
 
@@ -130,6 +147,11 @@ You can also add, edit, or remove tools and categories directly from the **Manag
 - **Permanent Save:** To ensure tools are not lost after clearing browser data, manually add them to `management-dashboard/web-tools-list.js` as described in the **How to Import a Local Tool** section.
 - **Sync:** Use the **"Update Changes"** button in the dashboard to refresh with the latest default tools.
 
+---
+
+## 🗒️ **Version Release**
+__Latest Official Release:__ [<u>_v0.0.1-published_</u>](https://github.com/ndmh99/Web-Tools-App/releases/tag/v0.0.1-published)
+> To see all published versions, visit: [Releases Page](https://github.com/ndmh99/web-tools-app/releases)
 ---
 
 ## 🧑‍💻 **Technologies Used**
