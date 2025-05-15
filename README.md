@@ -77,8 +77,8 @@ Web Tools App/
       ```
    - Method 2 - Download the ZIP file
       Go to the [Releases](https://github.com/ndmh99/web-tools-app/releases) page and download the latest published ZIP file and extract it.
-   - Method 3 - Use the automated BAT file
-      Download the provided `.bat` file from the release page (Windows OS Only). Run it and follow the prompts to automatically download and extract the latest version.
+   - Method 3 - Use the automated __BAT file__ (for Windows) or __COMMAND file__ (for MacOS)
+      Download the provided `.bat` or `.command` file from the release page. Click to run it and follow the prompts to automatically download and extract the latest version.
 2. Open `index.html` in your favorite web browser.
 3. Browse tools by category, or open the **Management Dashboard** (`management-dashboard/management.html`) to customize your collection.
 4. Click any tool to launch it in a new tab!
