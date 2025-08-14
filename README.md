@@ -97,16 +97,25 @@ Follow these steps to make it a *permanent* part of your toolbox:
    - Add a new object to the `web_tools_list` array:
      ```js
      {
-       name: "My Local Tool",
-       link: "tools/mytool/filename.extension", // relative path to your tool
-       image: "tools/mytool/logo.png", // or a placeholder image
-       alt: "My Local Tool Logo",
-       category: "YourCategory" // Use an existing or new category
+         name: "My Local Tool",
+         link: "tools/mytool/filename.extension", // relative path to your tool
+         image: "tools/mytool/logo.png", // or a placeholder image
+         alt: "My Local Tool Logo",
+         category: "YourCategory" // Use an existing or new category
      }
      ```
    - Add your category to `web_tools_categories` if it's a new category.
-3. **Reload the app:**  
-   Click the **"Update Changes"** button at the top of `management-dashboard/management.html` (Management Dashboard) page.
+      ```js
+      {
+         const web_tools_categories = [
+         "Conversion",
+         "Design",
+         "Others"
+         ];
+      }
+      ```
+3. **Apply new defaults (if you edited the defaults file):**  
+   Open the Management Dashboard and click **"Reset to Defaults"** (you must type `AGREE`). This overwrites current local tools & categories with the contents of `web-tools-list.js`.
 
 ---
 
@@ -125,7 +134,8 @@ You can also add, edit, or remove tools and categories directly from the **Manag
 4. **To edit or remove tools/categories:**  
    Use the edit (✏️) or delete (🗑️) icons next to each item.
 5. **To make a tool permanent for all users:**  
-   - Add it to `management-dashboard/web-tools-list.js` as described above (for local tools, add into `tools` directory as well).
+   - Add it to `management-dashboard/web-tools-list.js` (ensure its folder exists under `tools/`).  
+   - Then either clear localStorage or use **Reset to Defaults** to reload the updated defaults.
 
 ---
 
@@ -146,7 +156,8 @@ You can also add, edit, or remove tools and categories directly from the **Manag
 - **Browse:** Explore tools by category on the main page `index.html`.
 - **Manage:** Open `management-dashboard/management.html` to add, edit, or remove tools and categories.
 - **Permanent Save:** To ensure tools are not lost after clearing browser data, manually add them to `management-dashboard/web-tools-list.js` as described in the **How to Import a Local Tool** section.
-- **Sync:** Use the **"Update Changes"** button in the dashboard to refresh with the latest default tools.
+- **Reset to Defaults:** Use **"Reset to Defaults"** (type `AGREE`) to discard current customizations and restore only the defaults from `web-tools-list.js`.
+   (Back up localStorage first if you want to preserve custom tools.)
 
 ---
 

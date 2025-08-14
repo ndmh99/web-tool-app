@@ -127,10 +127,10 @@
         <button
           id="btnUpdateChanges"
           class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-2 py-1.5 rounded-md text-sm font-medium focus:ring-2 focus:ring-blue-300 mobile-text-sm"
-          aria-label="Refresh to update changes made to the tools"
+          aria-label="Reset all tools & categories back to default set"
         >
-          <i class="fas fa-undo"></i>
-          <span class="hidden md:inline ml-1">Update Changes</span>
+          <i class="fas fa-history"></i>
+          <span class="hidden md:inline ml-1">Reset to Defaults</span>
         </button>
         <button
           id="btnAddTool"
@@ -525,7 +525,7 @@
               imgWrapper.className = 'flex items-center gap-3';
               
               const img = document.createElement('img');
-              img.src = '../'+tool.image;
+              img.src = /^(https?:)?\//.test(tool.image) ? tool.image : ('../' + tool.image);
               img.alt = tool.alt;
               img.width = 40;
               img.height = 40;
@@ -561,7 +561,7 @@
               details.className = 'mobile-grid text-sm';
               
               const link = document.createElement('a');
-              link.href = tool.link;
+              link.href = /^(https?:)?\//.test(tool.link) ? tool.link : ('../' + tool.link);
               link.target = '_blank';
               link.rel = 'noopener noreferrer';
               link.className = 'text-blue-600 truncate';
@@ -622,7 +622,8 @@
               const tdImg = document.createElement('td');
               tdImg.className = 'px-4 py-3';
               const img = document.createElement('img');
-              img.src = tool.image;
+              // If path is relative (local tool), prefix with ../ because dashboard is nested one level deeper than index
+              img.src = /^(https?:)?\//.test(tool.image) ? tool.image : ('../' + tool.image);
               img.alt = tool.alt;
               img.width = 48;
               img.height = 48;
@@ -646,7 +647,8 @@
               const tdLink = document.createElement('td');
               tdLink.className = 'px-4 py-3 text-blue-600 hover:underline truncate max-w-xs';
               const a = document.createElement('a');
-              a.href = tool.link;
+              // Adjust link similarly for local relative paths
+              a.href = /^(https?:)?\//.test(tool.link) ? tool.link : ('../' + tool.link);
               a.target = '_blank';
               a.rel = 'noopener noreferrer';
               a.textContent = tool.link;
@@ -837,21 +839,24 @@
         }
       }
 
-      // Refresh interface to update categories and tools
+      // Reset to Defaults: replaces current data with original seed lists after double confirmation
       btnUpdateChanges.addEventListener('click', function() {
-        if (confirm('Refresh to sync tools? This will reload the page.')) {
-
-          // Synchronize localStorage tools with default list
-          let storedList = JSON.parse(localStorage.getItem('web_tools_list')) || [];
-          const defaultNames = web_tools_list.map(tool => tool.name);
-
-          // Add tools from default list that are missing in localStorage
-          const storedNames = storedList.map(tool => tool.name);
-          const missingTools = web_tools_list.filter(tool => !storedNames.includes(tool.name));
-          storedList = storedList.concat(missingTools);
-
-          localStorage.setItem('web_tools_list', JSON.stringify(storedList));
-          location.reload();
+        // First confirmation dialog
+        const proceed = confirm('WARNING: This will ERASE all current tools and categories and restore the original default set. Continue?');
+        if (!proceed) { return; }
+        // Require explicit typed agreement
+        const typed = prompt('Type AGREE (ALL CAPS) to confirm full reset:');
+        if (typed !== 'AGREE') {
+          showToast('Reset cancelled.');
+          return;
+        }
+        try {
+          localStorage.setItem(STORAGE_KEY_TOOLS, JSON.stringify(web_tools_list));
+          localStorage.setItem(STORAGE_KEY_CATEGORIES, JSON.stringify(web_tools_categories));
+          showToast('Defaults restored. Reloading...');
+          setTimeout(() => { location.reload(); }, 800);
+        } catch (e) {
+          alert('Reset failed: ' + (e.message || e));
         }
       });
 

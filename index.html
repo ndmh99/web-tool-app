@@ -90,6 +90,20 @@
 
   <!-- Main JavaScript -->
   <script>
+    // Ensure default tools & categories are seeded on first ever visit (previously only dashboard did this)
+    (function seedDefaultsOnce(){
+      if(!localStorage.getItem('web_tools_list') || !localStorage.getItem('web_tools_categories')){
+        // Lightweight inline defaults (kept in sync with management-dashboard/web-tools-list.js)
+        const defaultsCategories = ["Conversion","Design","Others"]; 
+        const defaultsTools = [
+          { name: "File Extension Converter", link: "tools/conversion/file_ext_convert/index.html", image: "tools/conversion/file_ext_convert/img/logo.png", alt: "File Extension Converter Logo", category: "Conversion" },
+          { name: "Simple Paint", link: "tools/design/simple_paint/index.html", image: "tools/design/simple_paint/img/logo.png", alt: "Simple Paint Logo", category: "Design" },
+          { name: "FSWD Crash Course", link: "tools/others/fswd_crash_course/index.html", image: "tools/others/fswd_crash_course/img/logo.png", alt: "FSWD Crash Course Logo", category: "Others" }
+        ];
+        if(!localStorage.getItem('web_tools_list')) localStorage.setItem('web_tools_list', JSON.stringify(defaultsTools));
+        if(!localStorage.getItem('web_tools_categories')) localStorage.setItem('web_tools_categories', JSON.stringify(defaultsCategories));
+      }
+    })();
     // Elements for navigation and mobile drawer
     const menuBtn = document.getElementById('menu-btn');
     const menu = document.getElementById('menu');
